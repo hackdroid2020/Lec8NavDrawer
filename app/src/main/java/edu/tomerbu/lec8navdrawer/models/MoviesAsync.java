@@ -82,7 +82,6 @@ public class MoviesAsync extends AsyncTask<Void, Integer, ArrayList<Song>> {
     @Override
     protected void onPostExecute(ArrayList<Song> result) {
         //update UI (after the thread is done)
-
         System.out.println(result);
         mLiveData.setValue(result);
         //tell the viewModel:

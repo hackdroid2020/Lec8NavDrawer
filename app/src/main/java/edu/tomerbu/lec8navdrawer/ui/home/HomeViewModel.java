@@ -11,6 +11,7 @@ import edu.tomerbu.lec8navdrawer.models.Song;
 
 public class HomeViewModel extends ViewModel {
 
+    //data for the controller: (properties:)
     private MutableLiveData<String> mText;
     private MutableLiveData<List<Song>> mSongs;
 
