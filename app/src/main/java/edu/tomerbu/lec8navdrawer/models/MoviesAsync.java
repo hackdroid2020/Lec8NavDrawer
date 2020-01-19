@@ -2,6 +2,8 @@ package edu.tomerbu.lec8navdrawer.models;
 
 import android.os.AsyncTask;
 
+import androidx.lifecycle.MutableLiveData;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 //uses-permission INTERNET (manifest)
@@ -21,6 +24,14 @@ import javax.net.ssl.HttpsURLConnection;
 //Result: The type we want to return
 
 public class MoviesAsync extends AsyncTask<Void, Integer, ArrayList<Song>> {
+
+    //option # 2: (view model as a constructor parameter:)
+    private MutableLiveData<List<Song>> mLiveData;
+
+    public MoviesAsync(MutableLiveData<List<Song>> mLiveData) {
+        this.mLiveData = mLiveData;
+    }
+
     @Override
     protected ArrayList<Song> doInBackground(Void... voids) {
 
@@ -73,7 +84,10 @@ public class MoviesAsync extends AsyncTask<Void, Integer, ArrayList<Song>> {
         //update UI (after the thread is done)
 
         System.out.println(result);
-
+        mLiveData.setValue(result);
         //tell the viewModel:
+        //valid options: 1) observer design pattern
+        //~ option: 2) (Viewmodel)
+
     }
 }
