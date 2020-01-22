@@ -1,5 +1,7 @@
 package edu.tomerbu.lec8navdrawer.ui.home;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import edu.tomerbu.lec8navdrawer.R;
 import edu.tomerbu.lec8navdrawer.models.Song;
 
-public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder>{
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
 
     //properties:
     List<Song> songs;
@@ -37,10 +41,20 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         Song s = songs.get(position);
-
         holder.tvSong.setText(s.getName());
 
-        //TODO: how to show image from the internet (URL)
+        Picasso.get().
+                load(s.getArtworkUrl100()).
+                placeholder(R.drawable.ic_image_placeholder).
+                into(holder.imageArt);
+
+        //respond to onclick:
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(s.getArtistUrl()));
+
+            //startActivity?
+            holder.itemView.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -49,14 +63,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     }
 
 
-
-
-
-
     //the view holder class -> hold references to views in the item view.
     //we need a class For Song View
     //here the properties are the TextView and ImageView from the layout.xml item file
-    public static class SongViewHolder extends RecyclerView.ViewHolder{
+    public static class SongViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvSong;
         ImageView imageArt;

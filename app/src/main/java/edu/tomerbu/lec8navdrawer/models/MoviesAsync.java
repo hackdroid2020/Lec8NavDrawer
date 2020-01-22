@@ -1,33 +1,30 @@
 package edu.tomerbu.lec8navdrawer.models;
 
 import android.os.AsyncTask;
-
 import androidx.lifecycle.MutableLiveData;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.net.ssl.HttpsURLConnection;
-//uses-permission INTERNET (manifest)
-//Params: if we want this task to take parameters from the caller (activity/fragment)
-//Progress: if we want to report progress to the UI
-//Result: The type we want to return
+//in Java we used Threads:
+//Android does not allow HEAVY operations on the Main(UI) Thread!
+//Exception: Networking on the UI Thread
+//Database operations etc... (new Thread) (Async)
 
 public class MoviesAsync extends AsyncTask<Void, Integer, ArrayList<Song>> {
 
-    //option # 2: (view model as a constructor parameter:)
+    //property: LiveData<List<Song>>
+    //Observable List<Song>
     private MutableLiveData<List<Song>> mLiveData;
 
+    //in the constructor: init properties:
     public MoviesAsync(MutableLiveData<List<Song>> mLiveData) {
         this.mLiveData = mLiveData;
     }
@@ -65,7 +62,6 @@ public class MoviesAsync extends AsyncTask<Void, Integer, ArrayList<Song>> {
                 String name = songObject.getString("name");
                 String artistUrl = songObject.getString("artistUrl");
                 String artworkUrl100 = songObject.getString("artworkUrl100");
-
                 Song s = new Song(artistName, id, releaseDate, name, artistUrl, artworkUrl100);
                 result.add(s);
             }
@@ -82,11 +78,17 @@ public class MoviesAsync extends AsyncTask<Void, Integer, ArrayList<Song>> {
     @Override
     protected void onPostExecute(ArrayList<Song> result) {
         //update UI (after the thread is done)
-        System.out.println(result);
         mLiveData.setValue(result);
         //tell the viewModel:
-        //valid options: 1) observer design pattern
-        //~ option: 2) (Viewmodel)
-
     }
 }
+
+
+/*
+* class AsyncTask
+*   //doInBackground (Thread)
+*   //Rule #1) don't do heavy work on the UI Thread
+
+*   //onPostExecute() //the thread is done (we are on the UI Thread now)
+*   //Rule #2) ONLY The UI Thread may update UI
+* */

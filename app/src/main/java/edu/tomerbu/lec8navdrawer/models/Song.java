@@ -1,5 +1,5 @@
 package edu.tomerbu.lec8navdrawer.models;
-
+//POJO: Plain old java class
 public class Song {
     private String artistName;
     private String id;
