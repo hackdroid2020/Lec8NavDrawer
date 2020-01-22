@@ -31,15 +31,12 @@ public class HomeFragment extends Fragment {
         //final TextView textView = root.findViewById(R.id.text_home);
         final RecyclerView rvSongs = root.findViewById(R.id.recycler_songs);
 
-
-
         homeViewModel.getSongs().observe(this, new Observer<List<Song>>() {
             @Override
             public void onChanged(@Nullable List<Song> s) {
                 SongAdapter adapter = new SongAdapter(s, getLayoutInflater());
                 rvSongs.setLayoutManager(new LinearLayoutManager(getContext()));
                 rvSongs.setAdapter(adapter);
-
             }
         });
         return root;
